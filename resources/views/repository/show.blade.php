@@ -6,11 +6,11 @@
         @foreach ($items as $item)
             @if ($item['type'] === 'tree')
                 <li>
-                    📁 <a href="/{{ $user->username }}/{{ $repository->name }}/tree/master/{{ $item['path'] }}">{{ $item['basename'] }}</a>
+                    📁 <a href="/{{ $user->username }}/{{ $repository->name }}/tree/main/{{ $item['path'] }}">{{ $item['basename'] }}</a>
                 </li>
             @elseif($item['type'] === 'blob')
                 <li>
-                    📄 <a href="/{{ $user->username }}/{{ $repository->name }}/blob/master/{{ $item['path'] }}">{{ $item['basename'] }}</a>
+                    📄 <a href="/{{ $user->username }}/{{ $repository->name }}/blob/main/{{ $item['path'] }}">{{ $item['basename'] }}</a>
                 </li>
             @endif
         @endforeach

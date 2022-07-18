@@ -34,12 +34,12 @@ class TreeController extends Controller
         $items = [];
 
         foreach ($lines as $line) {
-            [, $type, , $path] = preg_split('/\s+/', $line);
+            [, $type, , $filePath] = preg_split('/\s+/', $line);
 
             $items[] = [
                 'type' => $type,
-                'path' => $path,
-                'basename' => pathinfo($path)['basename']
+                'path' => $filePath,
+                'basename' => pathinfo($filePath)['basename']
             ];
         }
 

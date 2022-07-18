@@ -7,7 +7,7 @@ services:
       - ../:/app
       - ../storage/app/public:/app/public/storage
     ports:
-      - 2222:22
+      - "2222:22"
 
   web:
     image: nginx:1-alpine

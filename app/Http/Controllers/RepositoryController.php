@@ -28,13 +28,13 @@ class RepositoryController extends Controller
             'name' => $request->name,
         ]);
 
-        mkdir(storage_path() . '/app/repos/' . $repo->id, 0777, true);
+        mkdir(storage_path() . "/app/repos/{$user->username}/{$repo->name}", 0777, true);
 
-        chdir(storage_path() . '/app/repos/' . $repo->id);
+        chdir(storage_path() . "/app/repos/{$user->username}/{$repo->name}");
 
         `git init --bare --shared`;
 
-        return redirect("/repositories/{$repo->id}");
+        return redirect("/repositories/{$user->username}/{$repo->name}");
     }
 
     public function show(Request $request, $username, $repositoryName)
@@ -51,12 +51,16 @@ class RepositoryController extends Controller
 
         // dd($repopath);
         chdir($repopath);
-        
-        $process = new Process(['git', 'ls-tree', 'master']);
+
+        $process = new Process(['git', 'ls-tree', 'main']);
         $process->run();
 
         $tree = trim($process->getOutput());
-        // dd($tree);
+
+        if ($tree === "") {
+            return "Repositório vazio";
+        }
+
         $lines = explode("\n", $tree);
         $items = [];
 
@@ -68,6 +72,8 @@ class RepositoryController extends Controller
                 'basename' => pathinfo($path)['basename'],
             ];
         }
+
+        //dd($items);
 
         usort($items, function($a, $b) {
             if ($a['type'] !== $b['type']) {
