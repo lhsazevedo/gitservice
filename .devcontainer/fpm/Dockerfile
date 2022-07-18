@@ -8,6 +8,8 @@ ARG USER_GID=$USER_UID
 
 RUN apt-get update && apt-get install -y \
     git \
+    openssh-server \
+    sudo \
     && rm -rf /var/lib/apt/lists/*
 
 # Create a non-root user to use if preferred - see https://aka.ms/vscode-remote/containers/non-root-user.
@@ -30,25 +32,15 @@ ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/do
 RUN chmod uga+x /usr/local/bin/install-php-extensions && sync \
     && install-php-extensions gd pdo_mysql zip bcmath \
     && rm /usr/local/bin/install-php-extensions
-    #
-    # Configure xdebug
-    # && echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/xdebug.ini \
-    # && echo "xdebug.remote_autostart=on" >> /usr/local/etc/php/conf.d/xdebug.ini \
-    # && echo "xdebug.remote_port=9100" >> /usr/local/etc/php/conf.d/xdebug.ini
 
-# RUN apk --no-cache add pcre-dev ${PHPIZE_DEPS} \
-#     && pecl install xdebug-2.8.1 \
-#     && docker-php-ext-enable xdebug \
-#     && apk del pcre-dev ${PHPIZE_DEPS}
+# Create git user and group. Password is 12345678
+COPY id_ed25519.pub /home/git/.ssh/authorized_keys
+RUN groupadd git && useradd -ms /bin/bash -g git -G $USER_GID -p nCZINfKwi0X2c git \
+    && mkdir -p /home/git/.ssh \
+    && chown git:git /home/git/.ssh/authorized_keys && chmod 600 /home/git/.ssh/authorized_keys \
+    && echo "    PubkeyAuthentication yes" >> /etc/ssh/ssh_config \
+    && service ssh start
 
-# RUN echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
-#     && echo "xdebug.remote_autostart=on" >> /usr/local/etc/php/conf.d/xdebug.ini \
-#     && echo "xdebug.remote_port=9100" >> /usr/local/etc/php/conf.d/xdebug.ini
-
-# RUN apk add --no-cache zlib zlib-dev libpng libpng-dev libjpeg-turbo \
-#     git libjpeg-turbo-dev \
-#     && docker-php-ext-configure gd --with-jpeg=/usr/include/ \
-#     && docker-php-ext-install -j$(nproc) gd \
-#     && apk del zlib-dev libpng-dev libjpeg-turbo-dev
-
-USER $USERNAME
+# Expose docker port 22
+# EXPOSE 22
+# EXPOSE 80
