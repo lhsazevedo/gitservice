@@ -1,8 +1,8 @@
-FROM php:8-fpm
+FROM php:8-cli
 
 # This Dockerfile adds a non-root user with sudo access. Update the “remoteUser” property in
 # devcontainer.json to use it. More info: https://aka.ms/vscode-remote/containers/non-root-user.
-ARG USERNAME=vscode
+ARG USERNAME=git
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
@@ -14,9 +14,7 @@ RUN apt-get update && apt-get install -y \
 
 # Create a non-root user to use if preferred - see https://aka.ms/vscode-remote/containers/non-root-user.
 RUN addgroup --gid $USER_GID $USERNAME \
-    && adduser --uid $USER_UID --ingroup $USERNAME $USERNAME \
-    && sed -i "/user =/c\user = $USERNAME" /usr/local/etc/php-fpm.d/www.conf \
-    && sed -i "/group =/c\group = $USERNAME" /usr/local/etc/php-fpm.d/www.conf
+    && adduser --uid $USER_UID --ingroup $USERNAME $USERNAME
 
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
@@ -34,9 +32,18 @@ RUN chmod uga+x /usr/local/bin/install-php-extensions && sync \
     && rm /usr/local/bin/install-php-extensions
 
 # Create git user and group. Password is 12345678
-# COPY id_ed25519.pub /home/git/.ssh/authorized_keys
+COPY id_ed25519.pub /home/git/.ssh/authorized_keys
+
+RUN chown git:git /home/git/.ssh/authorized_keys && chmod 600 /home/git/.ssh/authorized_keys \
+    && echo "    PubkeyAuthentication yes" >> /etc/ssh/ssh_config
+
 # RUN groupadd git && useradd -ms /bin/bash -g git -G $USER_GID -p nCZINfKwi0X2c git \
 #     && mkdir -p /home/git/.ssh \
 #     && chown git:git /home/git/.ssh/authorized_keys && chmod 600 /home/git/.ssh/authorized_keys \
 #     && echo "    PubkeyAuthentication yes" >> /etc/ssh/ssh_config
     # && service ssh start
+
+RUN mkdir -p /run/sshd
+
+ENTRYPOINT ["/usr/sbin/sshd", "-D", "-e"]
+# CMD ["/usr/sbin/sshd","-D",'-e']
