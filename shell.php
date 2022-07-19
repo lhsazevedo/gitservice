@@ -19,6 +19,6 @@ $repo = ltrim($repo, "/");
 chdir('/app/storage/app/repos');
 
 // TODO: Unsafe? See https://www.php.net/manual/en/function.passthru.php#refsect1-function.passthru-notes
-# file_put_contents("/app/storage/logs/gitssh.log", "$command '$repo'\n", FILE_APPEND);
+file_put_contents("/app/storage/logs/gitssh.log", "$command '$repo'\n", FILE_APPEND);
 
 passthru("$command '$repo'");
