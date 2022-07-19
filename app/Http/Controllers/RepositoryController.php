@@ -63,4 +63,23 @@ class RepositoryController extends Controller
             'items',
         ]));
     }
+
+    public function destroy(Request $request, $username, $repositoryName)
+    {
+        $user = User::where('username', $username)->firstOrFail();
+
+        $repository = Repository::query()
+            ->where('user_id', $user->id)
+            ->where('name', $repositoryName)
+            ->firstOrFail();
+
+        $repoFullName = $user->username . '/' . $repository->name;
+        $repopath = storage_path() . '/app/repos/' . $repoFullName;
+    
+        File::deleteDirectory($repopath);
+
+        $repository->delete();
+
+        return redirect("/dashboard");
+    }
 }

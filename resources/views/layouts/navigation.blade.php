@@ -1,6 +1,8 @@
 <nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
     <div>
-        <strong>GitService</strong>
+        <div style="font-size: 2em; margin-bottom: 8px;">
+            <strong>GitService</strong>
+        </div>
         <div>
             <span>Logged in as {{ Auth::user()->name }}</span>
             <form method="POST" action="{{ route('logout') }}" style="display: inline;">

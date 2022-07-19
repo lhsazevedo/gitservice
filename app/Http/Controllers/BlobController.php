@@ -24,7 +24,7 @@ class BlobController extends Controller
         // dd($repopath);
         chdir($repopath);
 
-        $process = new Process(['git', 'cat-file', '--textconv', "$ref:$path"]);
+        $process = new Process(['git', 'cat-file', 'blob', "$ref:$path"]);
         $process->run();
 
         $content = trim($process->getOutput());

@@ -16,6 +16,9 @@ class Repository
 
     public function lsTree($treeish, $path = null)
     {
+        // TODO: This will fail if object name doesn't exists.
+        // Maybe that's why other libs force you to list refs and pick one up?
+        // Well, I guess we could just check before running (or after? lol)
         $command = ['git', 'ls-tree', $treeish];
 
         if ($path) {

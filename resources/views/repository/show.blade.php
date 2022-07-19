@@ -1,6 +1,13 @@
 <x-app-layout>
     <h1>{{ $user->username }}/{{ $repository->name }}</h1>
 
+    <form method="POST">
+        @method('DELETE')
+        @csrf
+
+        <button>Excluir repositório</button>
+    </form>
+
     <h2>Files</h2>
     <ul>
         @foreach ($items as $path => $item)

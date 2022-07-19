@@ -27,9 +27,11 @@ Route::get('/dashboard', function () {
 })->middleware(['auth'])->name('dashboard');
 
 Route::get('/new', [RepositoryController::class, 'create']);
-Route::POST('/new', [RepositoryController::class, 'store']);
+Route::post('/new', [RepositoryController::class, 'store']);
 
 Route::get('/{user}/{repository}', [RepositoryController::class, 'show']);
+Route::delete('/{user}/{repository}', [RepositoryController::class, 'destroy']);
+
 Route::get(
     '/{user}/{repository}/tree/{ref?}/{path?}',
     TreeController::class
