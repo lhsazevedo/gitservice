@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Git\Git;
+use App\Git\Repository as GitRepository;
 use App\Models\Repository;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Process\Process;
 
@@ -26,15 +29,16 @@ class RepositoryController extends Controller
         $repo = Repository::create([
             'user_id' => $user->id,
             'name' => $request->name,
+            'default_branch' => 'master',
         ]);
 
-        mkdir(storage_path() . "/app/repos/{$user->username}/{$repo->name}", 0777, true);
+        $path = storage_path() . "/app/repos/{$user->username}/{$repo->name}";
 
-        chdir(storage_path() . "/app/repos/{$user->username}/{$repo->name}");
+        File::makeDirectory($path, 0777, true);
 
-        `git init --bare --shared`;
+        Git::init($path);
 
-        return redirect("/repositories/{$user->username}/{$repo->name}");
+        return redirect("/{$user->username}/{$repo->name}");
     }
 
     public function show(Request $request, $username, $repositoryName)
@@ -49,43 +53,9 @@ class RepositoryController extends Controller
         $repoFullName = $user->username . '/' . $repository->name;
         $repopath = storage_path() . '/app/repos/' . $repoFullName;
 
-        // dd($repopath);
-        chdir($repopath);
+        $gitRepo = new GitRepository($repopath);
 
-        $process = new Process(['git', 'ls-tree', 'main']);
-        $process->run();
-
-        $tree = trim($process->getOutput());
-
-        if ($tree === "") {
-            return "Repositório vazio";
-        }
-
-        $lines = explode("\n", $tree);
-        $items = [];
-
-        foreach ($lines as $line) {
-            [$mode, $type, $id, $path] = preg_split('/\s+/', $line);
-            $items[] = [
-                'type' => $type,
-                'path' => $path,
-                'basename' => pathinfo($path)['basename'],
-            ];
-        }
-
-        //dd($items);
-
-        usort($items, function($a, $b) {
-            if ($a['type'] !== $b['type']) {
-                if ($a['type'] === 'tree') {
-                    return -1;
-                } else {
-                    return 1;
-                }
-            }
-
-            return strcmp($a['basename'], $b['basename']);
-        });
+        $items = $gitRepo->lsTree($repository->default_branch);
 
         return view('repository.show', compact([
             'user',

@@ -19,8 +19,11 @@ return new class extends Migration
             $table->foreignIdFor(User::class)->constrained();
 
             $table->string('name');
+            $table->string('default_branch');
 
             $table->timestamps();
+
+            $table->unique(['user_id', 'name']);
         });
     }
 
