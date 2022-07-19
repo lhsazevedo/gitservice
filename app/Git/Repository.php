@@ -11,6 +11,8 @@ class Repository
 
     public function __construct(string $path)
     {
+        // TODO: Check if it is a real git repository
+
         $this->path = $path;
     }
 
