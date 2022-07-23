@@ -4,13 +4,16 @@ namespace App\Git;
 
 class Obj
 {
-    public string $objectish;
+    public Repository $repository;
+
+    public string $ref;
 
     public string $type;
 
-    public function __construct($objectish, $type)
+    public function __construct(Repository $repository, $ref, $type)
     {
-        $this->objectish = $objectish;
+        $this->repository = $repository;
+        $this->ref = $ref;
         $this->type = $type;
     }
 }

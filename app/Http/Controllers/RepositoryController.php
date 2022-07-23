@@ -55,7 +55,9 @@ class RepositoryController extends Controller
 
         $gitRepo = new GitRepository($repopath);
 
-        $items = $gitRepo->lsTree($repository->default_branch);
+        $tree = $gitRepo->listTree2($repository->default_branch);
+        $tree->sort();
+        $items = $tree->children;
 
         return view('repository.show', compact([
             'user',

@@ -10,14 +10,14 @@
 
     <h2>Files</h2>
     <ul>
-        @foreach ($items as $path => $item)
-            @if ($item->type === 'tree')
+        @foreach ($items as $item)
+            @if ($item->obj->type === 'tree')
                 <li>
-                    📁 <a href="/{{ $user->username }}/{{ $repository->name }}/tree/{{ $repository->default_branch }}/{{ $path }}">{{ pathinfo($path)['basename'] }}</a>
+                    📁 <a href="/{{ $user->username }}/{{ $repository->name }}/tree/{{ $repository->default_branch }}/{{ $item->path }}">{{ pathinfo($item->path)['basename'] }}</a>: {{ $item->latestCommitMessage($repository->default_branch) }}
                 </li>
-            @elseif($item->type === 'blob')
+            @elseif($item->obj->type === 'blob')
                 <li>
-                    📄 <a href="/{{ $user->username }}/{{ $repository->name }}/blob/{{ $repository->default_branch }}/{{ $path }}">{{ pathinfo($path)['basename'] }}</a>
+                    📄 <a href="/{{ $user->username }}/{{ $repository->name }}/blob/{{ $repository->default_branch }}/{{ $item->path }}">{{ pathinfo($item->path)['basename'] }}</a>: {{ $item->latestCommitMessage($repository->default_branch) }}
                 </li>
             @endif
         @endforeach

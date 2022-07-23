@@ -1,3 +1,28 @@
 /* @tailwind base;
 @tailwind components;
 @tailwind utilities; */
+
+:root {
+    --color-primary: hsl(214, 65%, 32%);
+
+    --color-navbar: hsl(215, 80%, 90%);
+}
+
+body {
+    font-family: 'Nunito', sans-serif;
+    color: hsl(215, 20%, 16%);
+    margin: 0;
+}
+
+.navbar {
+    display: flex;
+    padding: 16px 8px;
+    background-color: var(--color-navbar);
+}
+
+.brand  {
+    font-size: 26px;
+    color: var(--color-primary);
+    font-weight: 600;
+    line-height: 1;
+}
