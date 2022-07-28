@@ -1,25 +1,36 @@
 <x-app-layout>
-    <h1>{{ $user->username }}/{{ $repository->name }}</h1>
+  <div class="container py-4">
+    <h1 class="mb-4">{{ $user->username }}/{{ $repository->name }}</h1>
 
-    <form method="POST">
+    <form class="mb-4" method="POST">
         @method('DELETE')
         @csrf
 
-        <button>Excluir repositório</button>
+        <button class="btn btn-light">Excluir repositório</button>
     </form>
+    
+    <div class="card">
+      <table class="table table-sm w-100 mb-0">
+        <tbody>
+          @foreach ($items as $item)
+            <tr>
+              @if ($item->obj->type === 'tree')
+                  <td>
+                      <span class="mx-2">📁</span><a class="link-dark text-decoration-none" href="/{{ $user->username }}/{{ $repository->name }}/tree/{{ $repository->default_branch }}/{{ $item->path }}">{{ pathinfo($item->path)['basename'] }}</a>
+                  </td>
+              @elseif($item->obj->type === 'blob')
+                  <td>
+                      <span class="mx-2">📄</span><a class="link-dark text-decoration-none" href="/{{ $user->username }}/{{ $repository->name }}/blob/{{ $repository->default_branch }}/{{ $item->path }}">{{ pathinfo($item->path)['basename'] }}</a>
+                  </td>
+              @endif
 
-    <h2>Files</h2>
-    <ul>
-        @foreach ($items as $item)
-            @if ($item->obj->type === 'tree')
-                <li>
-                    📁 <a href="/{{ $user->username }}/{{ $repository->name }}/tree/{{ $repository->default_branch }}/{{ $item->path }}">{{ pathinfo($item->path)['basename'] }}</a>: {{ $item->latestCommitMessage($repository->default_branch) }}
-                </li>
-            @elseif($item->obj->type === 'blob')
-                <li>
-                    📄 <a href="/{{ $user->username }}/{{ $repository->name }}/blob/{{ $repository->default_branch }}/{{ $item->path }}">{{ pathinfo($item->path)['basename'] }}</a>: {{ $item->latestCommitMessage($repository->default_branch) }}
-                </li>
-            @endif
-        @endforeach
-    </ul>
+              <td class="text-muted">
+                {{ $item->latestCommitMessage($repository->default_branch) }}
+              </td>
+            </tr>
+          @endforeach
+        </tbody>
+      </table>
+    </div>
+  </div>
 </x-app-layout>

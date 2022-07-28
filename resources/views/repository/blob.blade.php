@@ -1,5 +1,9 @@
 <x-app-layout>
-    <h1>{{ $user->username }}/{{ $repository->name }}/{{ $path }}</h1>
+  <div class="container py-4">
+    <h1 class="mb-4">{{ $user->username }}/{{ $repository->name }}/{{ $path }}</h1>
 
-    <pre style="border: 1px solid black; padding: 8px;">{{ $content }}</pre>
+    <div class="card p-4">
+      <pre>{{ $content }}</pre>
+    </div>
+  </div>
 </x-app-layout>

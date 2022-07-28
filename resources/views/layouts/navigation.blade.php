@@ -1,22 +1,26 @@
-<nav class="navbar">
-    <div class="brand">GitService</div>
+<nav class="navbar navbar-expand bg-dark navbar-dark">
+  <div class="container-fluid">
+    <div class="navbar-brand">GitService</div>
 
-    <div class="navbar-nav">
-        <a class="navbar-link" href="{{ route('dashboard') }}">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" href="{{ route('dashboard') }}">
             {{ __('Dashboard') }}
         </a>
-    </div>
+      </li>
+    </ul>
 
-    <div class="navbar-nav ms-auto">
-        <span>Logged in as {{ Auth::user()->name }}</span>
-        <form method="POST" action="{{ route('logout') }}" style="display: inline;">
+    <ul class="navbar-nav ms-auto">
+      <span class="navbar-text">Logged in as {{ Auth::user()->name }}</span>
+      <li class="nav-item">
+        <form class="d-inline" method="POST" action="{{ route('logout') }}">
             @csrf
-
-            <a class="navbar-link" href="{{ route('logout')}}" onclick="event.preventDefault(); this.closest('form').submit();">
+            <a class="nav-link" href="{{ route('logout')}}" onclick="event.preventDefault(); this.closest('form').submit();">
                 {{ __('Log Out') }}
             </a>
         </form>
-    </div>
-
+      </li>
+    </ul>
+  </div>
     
 </nav>

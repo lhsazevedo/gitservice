@@ -25,7 +25,9 @@ class TreeController extends Controller
 
         $gitRepo = new GitRepository($repopath);
 
-        $items = $gitRepo->listTree($ref, $path . '/');
+        $tree = $gitRepo->listTree2($ref, $path . '/');
+        $tree->sort();
+        $items = $tree->children;
         
         return view('repository.tree', compact([
             'user',

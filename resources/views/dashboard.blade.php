@@ -1,14 +1,16 @@
 <x-app-layout>
-    <div class="container">
-        <h1>Dashboard</h1>
+    <div class="container py-4">
+        <h1 class="mb-4">Dashboard</h1>
 
-        <h2>Repositories</h2>
-        <a href="/new">Create new repo</a>
+        <div class="d-flex align-items-center mb-4">
+            <h2 class="h3">Repositories</h2>
+            <a class="btn btn-primary ms-auto" href="/new">Create new repo</a>
+        </div>
 
         <ul>
             @foreach ($repositories as $repository)
-                <li>
-                    <a href="/{{ auth()->user()->username }}/{{ $repository->name }}">{{ $repository->name }}</a>
+                <li class="h4">
+                    <a class="text-decoration-none" href="/{{ auth()->user()->username }}/{{ $repository->name }}">{{ auth()->user()->username }}/{{ $repository->name }}</a>
                 </li>
             @endforeach
         </ul>
