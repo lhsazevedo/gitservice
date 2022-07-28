@@ -1,18 +1,22 @@
 <nav class="navbar">
     <div class="brand">GitService</div>
 
-    <div>
-        <a href="{{ route('dashboard') }}">
+    <div class="navbar-nav">
+        <a class="navbar-link" href="{{ route('dashboard') }}">
             {{ __('Dashboard') }}
         </a>
     </div>
 
-    <span>Logged in as {{ Auth::user()->name }}</span>
-    <form method="POST" action="{{ route('logout') }}" style="display: inline;">
-        @csrf
+    <div class="navbar-nav ms-auto">
+        <span>Logged in as {{ Auth::user()->name }}</span>
+        <form method="POST" action="{{ route('logout') }}" style="display: inline;">
+            @csrf
 
-        <a href="{{ route('logout')}}" onclick="event.preventDefault(); this.closest('form').submit();">
-            {{ __('Log Out') }}
-        </a>
-    </form>
+            <a class="navbar-link" href="{{ route('logout')}}" onclick="event.preventDefault(); this.closest('form').submit();">
+                {{ __('Log Out') }}
+            </a>
+        </form>
+    </div>
+
+    
 </nav>

@@ -3,26 +3,41 @@
 @tailwind utilities; */
 
 :root {
-    --color-primary: hsl(214, 65%, 32%);
+    --navbar-fg: hsl(214, 0%, 100%);
+    --navbar-dimmed-fg: hsl(214, 0%, 90%);    
 
-    --color-navbar: hsl(215, 80%, 90%);
+    --navbar-bg: hsl(215, 20%, 15%);
 }
 
 body {
-    font-family: 'Nunito', sans-serif;
+    font-family: 'Open Sans', sans-serif;
     color: hsl(215, 20%, 16%);
     margin: 0;
 }
 
 .navbar {
     display: flex;
+    align-items: center;
     padding: 16px 8px;
-    background-color: var(--color-navbar);
+    background-color: var(--navbar-bg);
+}
+
+.navbar-nav {
+    color: var(--navbar-dimmed-fg);
+}
+
+.navbar-link {
+    color: var(--navbar-fg);
+    margin: 0 8px;
+    font-weight: 600;
+    text-decoration: none;
 }
 
 .brand  {
-    font-size: 26px;
-    color: var(--color-primary);
-    font-weight: 600;
-    line-height: 1;
+    font-size: 20px;
+    letter-spacing: -0.05em;
+    color: var(--navbar-fg);
+    font-weight: 700;
+    /* line-height: 1; */
+    margin-right: 16px;
 }
