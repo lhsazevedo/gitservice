@@ -54,15 +54,21 @@ class RepositoryController extends Controller
         $repopath = storage_path() . '/app/repos/' . $repoFullName;
 
         $gitRepo = new GitRepository($repopath);
+        $isEmpty = $gitRepo->isEmpty();
 
-        $tree = $gitRepo->listTree2($repository->default_branch);
-        $tree->sort();
-        $items = $tree->children;
+        // TODO: Improve?
+        $items = null;
+        if (!$isEmpty) {
+            $tree = $gitRepo->listTree2($repository->default_branch);
+            $tree->sort();
+            $items = $tree->children;
+        }
 
-        return view('repository.show', compact([
+        $view = view('repository.show', compact([
             'user',
             'repository',
             'items',
+            'isEmpty'
         ]));
     }
 

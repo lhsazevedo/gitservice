@@ -2,6 +2,7 @@
 
 namespace App\Git;
 
+use Exception;
 use stdClass;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
@@ -94,6 +95,17 @@ class Repository
         });
 
         return $items;
+    }
+
+    public function isEmpty(): bool
+    {
+        try {
+            $this->run(['git', 'show-ref', '--head', '^HEAD$']);
+        } catch (ProcessFailedException $e) {
+            return true;
+        }
+
+        return false;
     }
 
     public function run(array $command): Process
